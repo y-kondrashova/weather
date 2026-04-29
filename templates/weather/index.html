@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="topbar">
+    <div>
+      <h1>Weather</h1>
+      <p class="subtitle">Search by city or coordinates.</p>
+    </div>
+    <form method="post" action="{% url 'logout' %}">
+      {% csrf_token %}
+      <button class="secondary" type="submit">Log out</button>
+    </form>
+  </section>
+
+  <section class="layout">
+    <aside class="panel">
+      <div class="panel-body">
+        <h2>Search</h2>
+        {% include "weather/components/weather_form.html" %}
+      </div>
+    </aside>
+
+    <section class="panel result">
+      <div class="panel-body">
+        {% include "weather/components/weather_result.html" %}
+      </div>
+    </section>
+  </section>
+{% endblock %}

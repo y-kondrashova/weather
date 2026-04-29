@@ -2,6 +2,23 @@ import math
 
 from .openweather import get_weather as openweather
 from .weatherapi import get_weather as weatherapi
+from weather.models import Location, WeatherSource, CurrentWeather
+from django.utils import timezone
+
+
+def get_or_create_location(city, lat=None, lon=None):
+    location, _ = Location.objects.get_or_create(
+        city=city,
+        defaults={
+            "lat": lat or 0,
+            "lon": lon or 0,
+        }
+    )
+    return location
+
+def get_or_create_source(name):
+    source, _ = WeatherSource.objects.get_or_create(name=name)
+    return source
 
 
 def get_aggregated_weather(city=None, lat=None, lon=None):
@@ -18,9 +35,32 @@ def get_aggregated_weather(city=None, lat=None, lon=None):
         return {
             "city": city,
             "temperature": None,
-            "description": "No data",
+            "feels_like": None,
+            "humidity": None,
+            "pressure": None,
+            "description": ["No data"],
             "sources": []
         }
+
+    location = get_or_create_location(
+        city=results[0]["city"],
+        lat=lat,
+        lon=lon
+    )
+
+    for result in results:
+        source = get_or_create_source(result["source"])
+
+        CurrentWeather.objects.update_or_create(
+            location=location,
+            source=source,
+            observed_at=timezone.now(),
+            temperature=result["temperature"],
+            feels_like=result["feels_like"],
+            humidity=result["humidity"],
+            pressure=result["pressure"],
+            description=result["description"],
+        )
 
     avg_temp = sum(r["temperature"] for r in results) / len(results)
     avg_feels_like = sum(r["feels_like"] for r in results) / len(results)

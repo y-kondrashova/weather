@@ -29,5 +29,4 @@ def get_weather(city=None, lat=None, lon=None):
         "pressure": data["main"]["pressure"],
         "wind_speed": data["wind"]["speed"],
         "description": data["weather"][0]["description"],
-        "observed_at": data["dt"],
     }
