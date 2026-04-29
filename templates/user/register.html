@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <section class="auth-page">
+    <div class="panel auth-panel">
+      <div class="panel-body">
+        <h1>Register</h1>
+        <p class="subtitle">Create an account to use the weather search.</p>
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+
+          {% if form.non_field_errors %}
+            <div class="message error">{{ form.non_field_errors|striptags }}</div>
+          {% endif %}
+
+          <label>
+            Username
+            {{ form.username }}
+            {% if form.username.errors %}
+              <span class="message error">{{ form.username.errors|striptags }}</span>
+            {% endif %}
+          </label>
+
+          <label>
+            Email
+            {{ form.email }}
+            {% if form.email.errors %}
+              <span class="message error">{{ form.email.errors|striptags }}</span>
+            {% endif %}
+          </label>
+
+          <label>
+            Password
+            {{ form.password1 }}
+            {% if form.password1.errors %}
+              <span class="message error">{{ form.password1.errors|striptags }}</span>
+            {% endif %}
+          </label>
+
+          <label>
+            Confirm password
+            {{ form.password2 }}
+            {% if form.password2.errors %}
+              <span class="message error">{{ form.password2.errors|striptags }}</span>
+            {% endif %}
+          </label>
+
+          <button type="submit">Register</button>
+        </form>
+
+        <p class="form-link">
+          Already have an account? <a href="{% url 'login' %}">Log in</a>
+        </p>
+      </div>
+    </div>
+  </section>
+{% endblock %}

@@ -1,0 +1,34 @@
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  {% if form.non_field_errors %}
+    <div class="message error">{{ form.non_field_errors|striptags }}</div>
+  {% endif %}
+
+  <label>
+    {{ form.city.label }}
+    {{ form.city }}
+    {% if form.city.errors %}
+      <span class="message error">{{ form.city.errors|striptags }}</span>
+    {% endif %}
+  </label>
+
+  <div class="field-row">
+    <label>
+      {{ form.lat.label }}
+      {{ form.lat }}
+      {% if form.lat.errors %}
+        <span class="message error">{{ form.lat.errors|striptags }}</span>
+      {% endif %}
+    </label>
+    <label>
+      {{ form.lon.label }}
+      {{ form.lon }}
+      {% if form.lon.errors %}
+        <span class="message error">{{ form.lon.errors|striptags }}</span>
+      {% endif %}
+    </label>
+  </div>
+
+  <button type="submit">Get weather</button>
+</form>
